@@ -10,10 +10,8 @@ int main()
     //choix des variables
     int choix, effectif, nombreMatiere;
     char nomFiliere[20];
-    float average = 0;
 
-    Filiere filiere;
-
+    //obtenir les informations de la filière
     printf("\nnom de la filiere : ");
     scanf("%s", &nomFiliere);
 
@@ -23,8 +21,11 @@ int main()
     printf("\nnombre de matieres de la filiere : ");
     scanf("%d", &nombreMatiere);
 
+    //instancier la filiere
+    Filiere filiere;
     filiere = (Filiere)malloc(effectif * sizeof(struct Etudiant));
 
+    //enregistrer les etudiants
     for(int i = 0; i < effectif; i++) {
         printf("\nSaisie de l'etudiant numero %d\n", i+1);
         printf("Entrer le nom : ");
@@ -48,60 +49,43 @@ int main()
 
     }
 
+
+    //afficher les informations de la filière
     printf("\n+----------------------------------------------------------------------+\n");
     printf("Filiere = %s\n", nomFiliere);
     printf("Effectif = %d\n", effectif);
     printf("Nombre de matieres = %d\n", nombreMatiere);
+    printf("+----------------------------------------------------------------------+\n");
     printf("\n");
 
     //Calcul de moyennes
-    for(int i = 0; i < effectif; i++) {
-        average = 0;
-        for(int j = 0; j < nombreMatiere; j++) {
-            average += *((filiere[i].notes)+j);
-        }
-        filiere[i].moyenne = average / nombreMatiere;
-    }
+    calculMoyenne(filiere, effectif, nombreMatiere);
 
-    //menu principal
+    Filiere newFiliere = obtenirListeOrdonneEtudiant(filiere, effectif);
+
+    //gestion des choix du menu
     do {
         choix = afficherMenu();
 
         switch(choix) {
             case 1: printf("\v--------------MOYENNE DE CHAQUE ETUDIANT-------------\n");
-                    for(int i = 0; i < effectif; i++) {
-                        printf("%s %s ------> %f\n", filiere[i].nom, filiere[i].prenom, filiere[i].moyenne);
-                    };
+                    afficherMoyenneEtudiant(filiere, effectif);
                     break;
             case 2: printf("\v-------MOYENNE DE CHAQUE ETUDIANT PAR ORDRE D'EXCELLENCE------\n");
-                    struct Etudiant temp;
-                    Filiere newFiliere;
-                    newFiliere = (Filiere)malloc(effectif * sizeof(struct Etudiant));
-                    newFiliere = filiere;
-                    for(int i = 0; i < effectif; i++) {
-                        for(int j = 1; j < effectif; j++) {
-                            if(newFiliere[i].moyenne < newFiliere[j].moyenne) {
-                                temp = newFiliere[i];
-                                newFiliere[i] = newFiliere[j];
-                                newFiliere[j] = temp;
-                            }
-                        };
-                    };
-                    for(int i = 0; i < effectif; i++) {
-                        printf("%s %s ------> %f\n", newFiliere[i].nom, newFiliere[i].prenom, newFiliere[i].moyenne);
-                    };
-                    free(newFiliere);
+                    afficherMoyenneEtudiant(newFiliere, effectif);
                     break;
             case 3: printf("\v--------------MOYENNE DE LA SALLE-------------\n");
-                    float moyenneDeLaSalle = 0;
-                    for(int i = 0; i < effectif; i++) {
-                        moyenneDeLaSalle += filiere[i].moyenne;
-                    };
-                    printf("moyenne ------> %f\n", moyenneDeLaSalle / effectif );
+                    printf("moyenne ------> %f\n", moyenneDeLaSalle(filiere, effectif) );
                     break;
-            case 4: printf("2");
+            case 4: printf("\v-------MOYENNES DES TROIS MEILLEURS ETUDIANTS------\n");
+                    int nombreAffichage = effectif;
+                    if(effectif >= 3)
+                        nombreAffichage = 3;
+                    afficherMoyenneEtudiant(newFiliere, nombreAffichage);
                     break;
-            case 5: printf("2");
+            case 5: printf("\v-------ETUDIANT AYANT LA MEILLEURE MOYENNE------\n");
+                    int max = obtenirMeileureMoyenne(filiere, effectif);
+                    printf("%s %s ------> %f\n", filiere[max].nom, filiere[max].prenom, filiere[max].moyenne);
                     break;
             case 0: printf("Au revoir !!!\n"); exit(1);
                     break;
@@ -113,6 +97,7 @@ int main()
 
 
     free(filiere);
+    free(newFiliere);
 
     return 0;
 }
