@@ -16,6 +16,7 @@ int aficherMenu();
 void calculMoyenne(Filiere, int, int);
 void afficherMoyenneEtudiant(Filiere, int);
 Filiere obtenirListeOrdonneEtudiant(Filiere, int);
+Filiere obtenirListeDesEtudiantes(Filiere, int);
 float moyenneDeLaSalle(Filiere, int);
 int obtenirMeileureMoyenne(Filiere, int);
 
@@ -28,7 +29,7 @@ int afficherMenu() {
     printf("  2: Afficher les moyennes de chaque etudiant par ordre d'excellence\n");
     printf("  3: Afficher la moyenne de la salle \n");
     printf("  4: Afficher les moyennes des trois meilleurs etudiants \n");
-    printf("  5: Afficher l'etudiant ayant la meilleure moyenne \n");
+    printf("  5: Afficher l'etudiante ayant la meilleure moyenne \n");
     printf("  0: Sortir \n\n");
     printf("+----------------------------------------------------------------------+\n\n");
 
@@ -86,6 +87,18 @@ float moyenneDeLaSalle(Filiere filiere, int effectif) {
     };
     return somme / effectif;
 };
+
+Filiere obtenirListeDesEtudiantes(Filiere filiere, int effectif) {
+    Filiere newFiliere;
+    newFiliere = (Filiere)malloc(effectif * sizeof(struct Etudiant));
+
+    for(int i = 0; i < effectif; i++) {
+        if(filiere[i].sexe == 'F') {
+            newFiliere[i] = filiere[i];
+        }
+    }
+    return newFiliere;
+}
 
 int obtenirMeileureMoyenne(Filiere filiere, int effectif) {
     int max = 0;

@@ -32,7 +32,7 @@ int main()
         scanf("%s", &filiere[i].nom);
         printf("Entrer le prenom : ");
         scanf("%s", &filiere[i].prenom);
-        printf("Entrer le sexe : ");
+        printf("Entrer le sexe (M ou F) : ");
         scanf("%s", &filiere[i].sexe);
         printf("Entrer l'age de l'etudiant: ");
         scanf("%d", &filiere[i].age);
@@ -83,9 +83,13 @@ int main()
                         nombreAffichage = 3;
                     afficherMoyenneEtudiant(newFiliere, nombreAffichage);
                     break;
-            case 5: printf("\v-------ETUDIANT AYANT LA MEILLEURE MOYENNE------\n");
-                    int max = obtenirMeileureMoyenne(filiere, effectif);
-                    printf("%s %s ------> %f\n", filiere[max].nom, filiere[max].prenom, filiere[max].moyenne);
+            case 5: printf("\v-------ETUDIANTE AYANT LA MEILLEURE MOYENNE------\n");
+                    Filiere filiereEtudiantes = obtenirListeDesEtudiantes(filiere, effectif);
+                    int max = obtenirMeileureMoyenne(filiereEtudiantes, effectif);
+                    if(filiereEtudiantes[max].sexe == NULL)
+                        printf("Aucune etudiante trouvee\n");
+                    else
+                        printf("%s %s ------> %f\n", filiere[max].nom, filiere[max].prenom, filiere[max].moyenne);
                     break;
             case 0: printf("Au revoir !!!\n"); exit(1);
                     break;
